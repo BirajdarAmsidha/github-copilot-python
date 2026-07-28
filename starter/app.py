@@ -3,10 +3,17 @@ import sudoku_logic
 
 app = Flask(__name__)
 
+DIFFICULTY_CLUES = {
+    'easy': 40,
+    'medium': 32,
+    'hard': 24,
+}
+
 # Keep a simple in-memory store for current puzzle and solution
 CURRENT = {
     'puzzle': None,
-    'solution': None
+    'solution': None,
+    'difficulty': 'medium',
 }
 
 @app.route('/')
@@ -15,11 +22,13 @@ def index():
 
 @app.route('/new')
 def new_game():
-    clues = int(request.args.get('clues', 35))
+    difficulty = request.args.get('difficulty', CURRENT['difficulty']).lower()
+    clues = DIFFICULTY_CLUES.get(difficulty, DIFFICULTY_CLUES['medium'])
     puzzle, solution = sudoku_logic.generate_puzzle(clues)
     CURRENT['puzzle'] = puzzle
     CURRENT['solution'] = solution
-    return jsonify({'puzzle': puzzle})
+    CURRENT['difficulty'] = difficulty
+    return jsonify({'puzzle': puzzle, 'solution': solution, 'difficulty': difficulty})
 
 @app.route('/check', methods=['POST'])
 def check_solution():

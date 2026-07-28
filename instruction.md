@@ -1,0 +1,7 @@
+- Use clean and modular code structure
+- Follow Flask best practices
+- Separate logic and UI
+- Use meaningful variable names
+- Add comments where needed
+- Keep UI responsive (mobile + desktop)
+- Support dark mode
