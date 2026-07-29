@@ -1,40 +1,81 @@
+:root {
+    color-scheme: light;
+    --bg: #f4f4f4;
+    --text: #333;
+    --panel-bg: #fff;
+    --panel-text: #333;
+    --board-bg: #fff;
+    --board-border: #333;
+    --cell-bg: #fafafa;
+    --cell-border: #bbb;
+    --cell-text: #333;
+    --cell-alt-bg: #f3f7ff;
+    --button-bg: #1976d2;
+    --button-hover: #1565c0;
+    --button-text: #fff;
+    --input-bg: #fff;
+    --control-text: #333;
+    --message-color: #d32f2f;
+}
+
 body {
     font-family: Arial, sans-serif;
-    background: #f4f4f4;
-    color: #333;
+    background: var(--bg);
+    color: var(--text);
     text-align: center;
     margin: 0;
     padding: 16px;
     box-sizing: border-box;
+    transition: background 0.2s ease, color 0.2s ease;
 }
 
 body.dark-mode {
-    background: #121212;
-    color: #f5f5f5;
+    color-scheme: dark;
+    --bg: #121212;
+    --text: #f5f5f5;
+    --panel-bg: #1e1e1e;
+    --panel-text: #f5f5f5;
+    --board-bg: #1e1e1e;
+    --board-border: #f5f5f5;
+    --cell-bg: #2a2a2a;
+    --cell-border: #555;
+    --cell-text: #f5f5f5;
+    --cell-alt-bg: #2f3a4f;
+    --button-bg: #2f80ed;
+    --button-hover: #2569c2;
+    --button-text: #fff;
+    --input-bg: #2b2b2b;
+    --control-text: #f5f5f5;
+    --message-color: #ffb4b4;
 }
 
 h1 {
     margin-top: 30px;
-    color: #333;
+    color: var(--text);
 }
 
-body.dark-mode h1,
+label,
+#timer {
+    color: var(--control-text);
+}
+
 body.dark-mode #scores-panel,
 body.dark-mode #scores-panel h2,
 body.dark-mode #scores-panel li,
 body.dark-mode label,
 body.dark-mode #timer {
-    color: #f5f5f5;
+    color: var(--panel-text);
 }
 
 #sudoku-board {
     display: inline-block;
     margin: 30px auto;
-    border: 4px solid #333;
-    background: #fff;
+    border: 4px solid var(--board-border);
+    background: var(--board-bg);
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     width: min(90vw, 360px);
     max-width: 360px;
+    transition: background 0.2s ease, border-color 0.2s ease;
 }
 
 .sudoku-row {
@@ -56,20 +97,20 @@ body.dark-mode #sudoku-board {
 .sudoku-cell {
     flex: 1 1 0;
     aspect-ratio: 1 / 1;
-    border: 1px solid #bbb;
+    border: 1px solid var(--cell-border);
     text-align: center;
     font-size: clamp(14px, 3vw, 20px);
     outline: none;
-    background: #fafafa;
-    color: #333;
-    transition: background 0.2s;
+    background: var(--cell-bg);
+    color: var(--cell-text);
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
     min-width: 0;
 }
 
 body.dark-mode .sudoku-cell {
-    border-color: #555;
-    background: #2a2a2a;
-    color: #f5f5f5;
+    border-color: var(--cell-border);
+    background: var(--cell-bg);
+    color: var(--cell-text);
 }
 
 .sudoku-row:nth-child(odd) .sudoku-cell:nth-child(odd),
@@ -137,6 +178,17 @@ body.dark-mode .sudoku-cell.prefilled {
     color: #f5f5f5;
 }
 
+/* Hinted cells are visually distinct from original prefilled cells */
+.sudoku-cell.hinted {
+    background: #fff8e1; /* light yellow to indicate hint */
+    color: #000;
+}
+
+body.dark-mode .sudoku-cell.hinted {
+    background: #4b3b00; /* darker hint bg in dark mode */
+    color: #fff;
+}
+
 .sudoku-cell.incorrect {
     background: #ffcdd2;
 }
@@ -146,14 +198,24 @@ body.dark-mode .sudoku-cell.incorrect {
     color: #fff;
 }
 
+.sudoku-cell.invalid {
+    border-color: #d32f2f;
+    background: #ffebee;
+}
+
+body.dark-mode .sudoku-cell.invalid {
+    background: #5e1d1d;
+    color: #fff;
+}
+
 .sudoku-cell:nth-child(3),
 .sudoku-cell:nth-child(6) {
-    border-right: 3px solid #333;
+    border-right: 3px solid var(--board-border);
 }
 
 .sudoku-row:nth-child(3) .sudoku-cell,
 .sudoku-row:nth-child(6) .sudoku-cell {
-    border-bottom: 3px solid #333;
+    border-bottom: 3px solid var(--board-border);
 }
 
 .controls {
@@ -167,39 +229,74 @@ body.dark-mode .sudoku-cell.incorrect {
 }
 
 button {
-    padding: 8px 18px;
+    padding: 10px 18px;
     margin: 0;
-    font-size: 16px;
+    font-size: clamp(14px, 1.8vw, 16px);
     border: none;
-    background: #1976d2;
-    color: #fff;
+    background: var(--button-bg);
+    color: var(--button-text);
     border-radius: 4px;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: background 0.2s ease, color 0.2s ease;
+    min-width: 100px;
+}
+
+button#theme-toggle {
+    min-width: 140px;
+}
+
+select {
+    min-width: 120px;
+    padding: 8px 10px;
 }
 
 button:hover {
-    background: #1565c0;
+    background: var(--button-hover);
+}
+
+select,
+label,
+#timer {
+    color: var(--control-text);
+}
+
+select {
+    padding: 6px 8px;
+    border: 1px solid var(--cell-border);
+    background: var(--input-bg);
+    color: var(--text);
+    border-radius: 4px;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+button:focus-visible,
+select:focus-visible,
+input:focus-visible {
+    outline: 2px solid #90caf9;
+    outline-offset: 2px;
 }
 
 body.dark-mode button {
-    background: #2f80ed;
+    background: var(--button-bg);
 }
 
 body.dark-mode button:hover {
-    background: #2569c2;
+    background: var(--button-hover);
 }
 
 #message {
     margin-left: 8px;
     font-size: 16px;
-    color: #d32f2f;
+    color: var(--message-color);
 }
 
 #scores-panel {
     max-width: 420px;
     margin: 24px auto;
     padding: 0 12px;
+    background: var(--panel-bg);
+    color: var(--panel-text);
+    transition: background 0.2s ease, color 0.2s ease;
 }
 
 #scores-list {
@@ -207,17 +304,49 @@ body.dark-mode button:hover {
     text-align: left;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 700px) {
+    #scores-panel {
+        padding: 0;
+    }
+}
+
+.sudoku-cell{
+    min-width: 34px;
+    max-width: 100%;
+    width: 100%;
+    height: auto;
+    text-align: center;
+}
+
+.sudoku-cell.block-0:not(.prefilled):not(.incorrect) {
+    background-color: #f2f2f2;
+}
+
+.sudoku-cell.block-1:not(.prefilled):not(.incorrect) {
+    background-color: #e6e6e6;
+}
+
+/* dark mode variations for block backgrounds (do not override prefilled/incorrect) */
+body.dark-mode .sudoku-cell.block-0:not(.prefilled):not(.incorrect) {
+    background-color: #2f3a4f;
+}
+
+body.dark-mode .sudoku-cell.block-1:not(.prefilled):not(.incorrect) {
+    background-color: #2a2a2a;
+}
+
+@media (max-width: 700px) {
     body {
         padding: 12px;
     }
 
     h1 {
         margin-top: 16px;
+        font-size: clamp(1.5rem, 5vw, 2rem);
     }
 
     #sudoku-board {
-        width: min(96vw, 320px);
+        width: min(96vw, 360px);
         margin: 20px auto;
     }
 
@@ -226,7 +355,15 @@ body.dark-mode button:hover {
         align-items: stretch;
     }
 
+    .controls > * {
+        width: 100%;
+    }
+
     button {
+        width: 100%;
+    }
+
+    select {
         width: 100%;
     }
 
@@ -234,5 +371,16 @@ body.dark-mode button:hover {
         margin-left: 0;
         display: block;
         margin-top: 8px;
+    }
+}
+
+@media (max-width: 420px) {
+    .sudoku-cell {
+        min-width: 28px;
+    }
+
+    button {
+        padding: 10px 14px;
+        font-size: 14px;
     }
 }
